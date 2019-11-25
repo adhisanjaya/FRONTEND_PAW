@@ -2,7 +2,7 @@
     <v-container> 
         <v-card>
             <v-container grid-list-md mb-0>
-                <h2 class="text-md-center">Data Sparepart</h2> 
+                <h2 class="text-md-center">Agreement Data</h2> 
                 <v-layout row wrap style="margin:10px"> 
                     <v-flex xs6> 
                         <v-btn
@@ -11,11 +11,11 @@
                         rounded 
                         style="text-transform: none !important;" 
                         color = "green accent-3" 
-                        @click="dialog = true"
                         >
-                        <v-icon size="18" class="mr-2">mdi-pencil-plus</v-icon>
-                            Tambah Sparepart
+                        <v-icon size="18" class="mr-2">mdi-book</v-icon>
+                            Make a Report
                         </v-btn>
+                        
                     </v-flex>
                     <v-flex xs6 class="text-right"> 
                         <v-text-field 
@@ -29,7 +29,7 @@
             
                 <v-data-table 
                     :headers="headers" 
-                    :items="spareparts" 
+                    :items="agreements" 
                     :search="keyword" 
                     :loading="load" 
                 > 
@@ -37,11 +37,12 @@
                         <tbody> 
                             <tr v-for="(item,index) in items" :key="item.id"> 
                                 <td>{{ index + 1 }}</td> 
-                                <td>{{ item.name }}</td> 
-                                <td>{{ item.merk}}</td> 
-                                <td>{{ item.amount}}</td>
-                                <td>{{ item.created_at}}</td> 
-                                <td class="text-center"> 
+                                <td>{{ item.user_name }}</td> 
+                                <td>{{ item.dokter_name}}</td>
+                                <td>{{ item.tanggalJanji}}</td>
+                                <td>{{ item.rumahSakit_name}}</td>
+                                <td>{{ item.keluhan}}</td>
+                                <td> 
                                     <v-btn 
                                         icon 
                                         color="indigo" 
@@ -65,40 +66,7 @@
                 </v-data-table> 
             </v-container> 
         </v-card> 
-        <v-dialog v-model="dialog" persistent max-width="600px"> 
-            <v-card> 
-                <v-card-title> 
-                    <span class="headline">Add Sparepart</span> 
-                </v-card-title> 
-                <v-card-text> 
-                    <v-container> 
-                        <v-row> 
-                            <v-col cols="12"> 
-                                <v-text-field label="Name*" v-model="form.name" required></v-text-field> 
-                            </v-col> 
-                            <v-col cols="12">
-                                <v-select
-                                    :items="items"
-                                    label="Merk*"
-                                    dense
-                                    v-model="form.merk"
-                                    required
-                                ></v-select>
-                            </v-col>
-                            <v-col cols="12"> 
-                                <v-text-field label="Amount*" v-model="form.amount" required></v-text-field> 
-                            </v-col> 
-                        </v-row> 
-                    </v-container>
-                    <small>*indicates required field</small> 
-                </v-card-text> 
-                <v-card-actions> 
-                    <v-spacer></v-spacer> 
-                    <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn> 
-                    <v-btn color="blue darken-1" text @click="setForm()">Save</v-btn> 
-                </v-card-actions> 
-            </v-card> 
-        </v-dialog> 
+        
         <v-snackbar 
             v-model="snackbar"
             :color="color" 
@@ -111,7 +79,7 @@
                 text 
                 @click="snackbar = false" 
             > 
-                Close 
+                Close
             </v-btn> 
         </v-snackbar> 
     </v-container> 
@@ -122,46 +90,61 @@ export default {
     data () { 
         return { 
             dialog: false, 
-            keyword: '', 
+            keyword: '',
+            users: [],
+            doctors: [],
+            rumahSakits: [],
+            temp: {
+                user_id : '',
+                doctor_id : '',
+                rumahSakit_id : '',
+            },
             headers: [ 
                 { 
                     text: 'No', 
                     value: 'no', 
                 }, 
                 { 
-                    text: 'Name', 
-                    value: 'name' 
+                    text: 'Name Customer', 
+                    value: 'nameCustomer' 
                 }, 
                 { 
-                    text: 'Merk', 
-                    value: 'merk' 
+                    text: 'Name Doctor', 
+                    value: 'nameDoctor' 
                 }, 
                 { 
-                    text: 'Amount', 
-                    value: 'amount' 
+                    text: 'Booking Date', 
+                    value: 'bookingDate' 
                 },
                 { 
-                    text: 'Time', 
-                    value: 'created_at' 
+                    text: 'Booking Place', 
+                    value: 'bookingPlace' 
                 }, 
+                { 
+                    text: 'Complaint', 
+                    value: 'keluhan' 
+                },
                 { 
                     text: 'Aksi', 
                     value: null 
                 }, 
-            ],
-            items: ['Honda', 'Yamaha', 'Suzuki'],
-            spareparts: [], 
+            ], 
+            agreements: [], 
             snackbar: false, 
             color: null, 
             text: '', 
             load: false,
             form: { 
-                name : '', 
-                merk : '', 
-                amount : '',
-                created_at : '' 
+                user_name : '', 
+                doctor_name : '', 
+                tanggalJanji : '',
+                rumahSakit_name : '',
+                keluhan: '',
             }, 
-            sparepart : new FormData, 
+            agreement : new FormData,
+            user: [],
+            doctor: [],
+            rumahSakit : new FormData,
             typeInput: 'new', 
             errors : '', 
             updatedId : '', 
@@ -169,26 +152,45 @@ export default {
     }, 
     methods:{ 
         getData(){ 
-            var uri = this.$apiUrl + '/sparepart' 
+            var uri = this.$apiUrl + '/agreement' 
             this.$http.get(uri).then(response =>{ 
-                this.spareparts=response.data.message 
+                this.agreements=response.data.message 
             }) 
-        }, 
+        },
+        getDataRumahUser(){ 
+            var uri = this.$apiUrl + '/user' 
+            this.$http.get(uri).then(response =>{ 
+                this.rumahSakits=response.data.message 
+            }) 
+        },
+        getDataRumahDokter(){ 
+            var uri = this.$apiUrl + '/dokter' 
+            this.$http.get(uri).then(response =>{ 
+                this.rumahSakits=response.data.message 
+            }) 
+        },
+        getDataRumahSakit(){ 
+            var uri = this.$apiUrl + '/rumahSakit' 
+            this.$http.get(uri).then(response =>{ 
+                this.rumahSakits=response.data.message 
+            }) 
+        },
         sendData(){ 
-            this.sparepart.append('name', this.form.name); 
-            this.sparepart.append('merk', this.form.merk); 
-            this.sparepart.append('amount', this.form.amount);
-            this.sparepart.append('created_at', this.form.created_at); 
-            var uri =this.$apiUrl + '/sparepart' 
+            this.agreement.append('id_user', this.form.user_id); 
+            this.agreement.append('id_dokter', this.form.dokter_id);
+            this.agreement.append('tanggalJanji', this.form.tanggalJanji);
+            this.agreement.append('id_rumahSakit', this.temp.rumahSakit_id); 
+            this.agreement.append('keluhan', this.form.keluhan);
+            var uri =this.$apiUrl + '/agreement' 
             this.load = true 
-            this.$http.post(uri,this.sparepart).then(response =>{ 
+            this.$http.post(uri,this.agreement).then(response =>{ 
                 this.snackbar = true; //mengaktifkan snackbar 
                 this.color = 'green'; //memberi warna snackbar 
                 this.text = response.data.message; //memasukkan pesan ke snackbar 
                 
                 this.load = false; 
                 this.dialog = false 
-                this.getData(); //mengambil data sparepart
+                this.getData(); //mengambil data agreement
                 this.resetForm(); 
             }).catch(error =>{ 
                 this.errors = error 
@@ -199,19 +201,20 @@ export default {
             }) 
         }, 
         updateData(){ 
-            this.sparepart.append('name', this.form.name); 
-            this.sparepart.append('merk', this.form.merk); 
-            this.sparepart.append('amount', this.form.amount);
-            this.sparepart.append('created_at', this.form.created_at);
-            var uri = this.$apiUrl + '/sparepart/' + this.updatedId; 
+            this.agreement.append('id_user', this.form.user_id); 
+            this.agreement.append('id_dokter', this.form.dokter_id);
+            this.agreement.append('tanggalJanji', this.form.tanggalJanji);
+            this.agreement.append('id_rumahSakit', this.temp.rumahSakit_id); 
+            this.agreement.append('keluhan', this.form.keluhan);
+            var uri = this.$apiUrl + '/agreement/' + this.updatedId; 
             this.load = true 
-            this.$http.post(uri,this.sparepart).then(response =>{
+            this.$http.post(uri,this.agreement).then(response =>{
             this.snackbar = true; //mengaktifkan snackbar 
             this.color = 'green'; //memberi warna snackbar 
             this.text = response.data.message; //memasukkan pesan ke snackbar 
             
             this.load = false; this.dialog = false 
-            this.getData(); //mengambil data sparepart
+            this.getData(); //mengambil data agreement
             this.resetForm(); this.typeInput = 'new'; 
         }).catch(error =>{ 
             this.errors = error 
@@ -226,12 +229,18 @@ export default {
             this.typeInput = 'edit'; 
             this.dialog = true; 
             this.form.name = item.name; 
-            this.form.merk = item.merk; 
-            this.form.amount = item.amount, 
+            this.form.spesialis = item.spesialis; 
+            this.form.image = item.image, 
             this.updatedId = item.id 
-        }, 
+        },
+        change(item){ 
+            this.typeInput = 'edit';
+            this.temp.rumahSakit_id = item.id;
+            this.temp.user_id = item.id;
+            this.temp.dokter_id = item.id;
+        },
         deleteData(deleteId){ //mengahapus data 
-            var uri = this.$apiUrl + '/sparepart/' + deleteId; //data dihapus berdasarkan id 
+            var uri = this.$apiUrl + '/agreement/' + deleteId; //data dihapus berdasarkan id 
             
             this.$http.delete(uri).then(response =>{ 
                 this.snackbar = true; 
@@ -256,14 +265,19 @@ export default {
         }, 
         resetForm(){ 
             this.form = { 
-                name : '', 
-                merk : '', 
-                amount : '' 
+                user : '', 
+                dokter : '',
+                tanggalJanji : '',
+                rumahSakit : '',
+                keluhan: '',
             } 
         } 
     }, 
     mounted(){ 
-        this.getData(); 
+        this.getData();
+        this.getDataRumahUser();
+        this.getDataRumahDokter();
+        this.getDataRumahSakit();
     }, 
 } 
 </script>
