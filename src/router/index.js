@@ -90,7 +90,7 @@ const routes = [
         path:'/userDashboard',
         component: userDashboard,
         beforeEnter(to, from, next) {
-            if (localStorage.getItem("token") && localStorage.getItem("type") == 1) {
+            if (localStorage.getItem("token") && localStorage.getItem("type") == 1 && localStorage.getItem("verif") == 1) {
                 next();
             } else {
                 next({

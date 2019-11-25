@@ -5,7 +5,7 @@ import router from './router'
 import vuetify from './plugins/vuetify';
 
 Vue.prototype.$http = Axios;
-Vue.prototype.$apiUrl = 'http://localhost/ugd11/index.php';
+Vue.prototype.$apiUrl = 'http://back.healthyconsultant.online/index.php';
 
 Vue.config.productionTip = false
 

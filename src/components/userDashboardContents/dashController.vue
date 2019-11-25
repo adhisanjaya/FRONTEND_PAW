@@ -25,7 +25,7 @@
           <v-btn
             color="blue-darken"
             depressed
-            round
+            rounded
             router to="/Login"
           >
             Get Started!

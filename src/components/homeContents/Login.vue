@@ -70,6 +70,7 @@
           localStorage.setItem("created", response.data.created_at);
           localStorage.setItem("id",response.data.id);
           localStorage.setItem("image",response.data.link_image);
+		  localStorage.setItem("verif",response.data.verif);
           
           if (localStorage.getItem("token") && localStorage.getItem("type") == 1) {
                 this.$router.push({ name: "dashController1" });
