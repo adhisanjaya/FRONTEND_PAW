@@ -23,8 +23,13 @@ const routes = [
         component: homeLayout,
         children: [
             {
+                name: 'dashController',
+                path: '/',
+                component: loadViews('dashController')
+            },
+            {
                 name: 'Login',
-                path: '',
+                path: '/Login',
                 component: loadMe('Login')
             },
             {
@@ -36,11 +41,6 @@ const routes = [
                 name: 'about_us',
                 path: '/about_us',
                 component: loadMe('about_us')
-            },
-            {
-                name: 'gallery',
-                path: '/gallery',
-                component: loadMe('gallery')
             },
             {
                 name: 'contact',
@@ -100,35 +100,45 @@ const routes = [
         },
         children: [
             {
-                name: 'dashController',
-                path: '/dashController',
-                component: loadViews('dashController')
+                name: 'dashController1',
+                path: '/dashController1',
+                component: loadViews('dashController1')
             },
             {
-                name: 'shopController',
-                path: '/shopController',
-                component: loadViews('shopController')
+                name: 'profileUserController',
+                path: '/profileUserController',
+                component: loadViews('profileUserController')
             },
             {
-                name: 'cartController',
-                path: '/cartController',
-                component: loadViews('cartController')
+                name: 'makeAgreementController',
+                path: '/makeAgreementController',
+                component: loadViews('makeAgreementController')
             },
             {
-                name: 'shopBongController',
-                path: '/shopBongController',
-                component: loadViews('shopBongController')
+                name: 'agreementForm',
+                path: '/agreementForm',
+                component: loadViews('agreementForm')
+            },
+            {
+                name: 'contact1',
+                path: '/contact1',
+                component: loadMe('contact1')
+            },
+            {
+                name: 'about_us1',
+                path: '/about_us1',
+                component: loadMe('about_us1')
             },
         ]
     },
 	{
-        path:'/shopController',
+        path:'/makeAgreementController',
         component: userDashboard,
         children: [
             {
-                name: 'Shop',
+                name: 'Make Agreement',
                 path: '',
-                component: loadViews('shopController')
+                component: loadViews('makeAgreementController')
             },
             
         ]

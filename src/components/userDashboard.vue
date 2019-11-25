@@ -2,10 +2,10 @@
     <div>
         <v-navigation-drawer v-model="drawer" class="greydarken-3" dark app clipped fixed temporary>
             <v-list-item>
-                <img src="../assets/marijuana.png" style="height:45px;width:45px">
+                <img src="../assets/logo.png" style="height:45px;width:45px">
                 <v-list-item-content>
                     <v-list-item-title class="title" style="margin-left:10px;">
-                        The High Five
+                        Healthy Consultant
                     </v-list-item-title>
                     <v-list-item-subtitle style="margin-left:10px;">
                         {{ name }}
@@ -32,13 +32,26 @@
             </template>
         </v-navigation-drawer>
 
-        <v-app-bar dark app fixed clipped-left height="70px" color="grey darken-3">
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
-            <VSpacer />
-
-            <img src="../assets/marijuana.png" style="height:45px;width:45px">
-
+        <v-app-bar 
+        dark
+        app
+        fixed
+        clipped-left
+        height="70px"
+        color="grey darken-3">
+        <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <img src="../assets/logo.png" style="height:45px;width:45px">
+        <v-toolbar-title 
+            style="font-size: 21px;" 
+            class="white--text ml-2"
+        > 
+            HEALTY CONSULTANT
+        </v-toolbar-title>
+        <VSpacer /> 
+        <v-btn text rounded router to="/dashController1">Home</v-btn>
+        <v-btn text rounded router to="/contact1">Contact Us</v-btn>
+        <v-btn text rounded router to="/about_us1">About Us</v-btn>
+        <v-btn text rounded router to="/profileUserController">Welcome, {{ name }}</v-btn>
         </v-app-bar>
 
         <VContent>
@@ -52,26 +65,12 @@
         data() {
             return {
                 drawer: null,
-                items: [{
-                        title: 'Dashboard',
-                        icon: 'mdi-account',
-                        to: "/dashController"
-                    },
+                items: [
                     {
-                        title: 'Shop Drug',
-                        icon: 'mdi-pill',
-                        to: "/shopController"
-                    },
-                    {
-                        title: 'Shop Bong',
-                        icon: 'mdi-flask-outline',
-                        to: "/shopBongController"
-                    },
-                    {
-                        title: 'Cart',
-                        icon: 'mdi-cart',
-                        to: "/cartController"
-                    }, 
+                        title: 'Make an Agreement',
+                        icon: 'mdi-book-multiple',
+                        to: "/makeAgreementController"
+                    }
                 ],
             }
         },
@@ -101,7 +100,7 @@
                     this.text = 'Try Again';
                     this.color = 'red';
                 })
-                this.$router.push({name : "Login"})
+                this.$router.push({name : "dashController"})
             },
     }
 }

@@ -1,41 +1,61 @@
-<template>
-  <base-card dark>
-    <v-img
-      class="grey lighten-2"
-      height="700"
-      width="300%"
-      :src="require('@/assets/articles/home.jpg')"
-    >
-      <v-layout
-        fill-height
-        align-center
-        pa-3
-      >
-        <v-flex
-          xs20
-          md7
-          offset-md0
-        >
-          <h1 class="display-3 font-weight-light">
-            Healthy Consultant
-          </h1>
-          <div class="subheading text-uppercase pl-2 mb-4">
-            Know your health,find your healthy body
-          </div>
-          <v-btn
-            color="blue-darken"
-            depressed
-            round
-            router to="/Login"
-          >
-            Get Started!
-          </v-btn>
-        </v-flex>
-      </v-layout>
-    </v-img>
-  </base-card>
-</template>
+<template >
+    <v-container>
+        <v-card style="margin:30px" class="mx-auto" max-width="600" elevation="5" outlined>
+            <v-container text-center>
+                <h2 class="text-md-center">User Profile</h2>
+                <v-layout row wrap style="margin:10px"></v-layout>
+                <v-row align="center" justify="center">
+                    <v-img
+                    :src= "this.link_image"
+                    lazy-src="https://picsum.photos/id/11/10/6"
+                    aspect-ratio="1"
+                    class="grey lighten-2"
+                    max-width="150"
+                    max-height="150"
+                    
+                    ></v-img>
+                </v-row>
+                <v-list-item-title class="headline">{{ this.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ this.email }}</v-list-item-subtitle>
+                <v-list-item-subtitle>{{ this.created_at }}</v-list-item-subtitle>
 
+                <v-btn color="primary" @click="editHandler()" >Edit Profile</v-btn>
+            </v-container>
+        </v-card>
+        <v-dialog v-model="dialog" persistent max-width="600px">
+            <v-card>
+                <v-card-title>
+                    <v-spacer />
+                    <span class="headline">User Profile</span>
+                    <v-spacer />
+                </v-card-title>
+                <v-card-text>
+                    <v-container>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field label="Name*" v-model="form.name"></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                  <v-text-field label="Image URL*" v-model="form.link_image"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                    <small>*indicates required field</small>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="dialog=false">Close</v-btn>
+                    <v-btn color="blue darken-1" text @click="updateData()">Save</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-snackbar v-model="snackbar" :color="color" :multi-line="true" :timeout="3000"> {{ text }} <v-btn dark text
+                @click="snackbar = false"> Close </v-btn>
+        </v-snackbar>
+    </v-container>
+    
+    
+</template>
 
 <script>
 export default {

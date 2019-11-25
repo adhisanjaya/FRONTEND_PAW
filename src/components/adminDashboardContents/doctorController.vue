@@ -91,6 +91,9 @@
                                     required
                                 ></v-select>
                             </v-col>
+                            <v-col cols="12">
+                                <v-text-field label="Link Image*" v-model="form.image" required></v-text-field>
+                            </v-col>
                         </v-row> 
                     </v-container>
                     <small>*indicates required field</small> 
@@ -127,15 +130,8 @@ export default {
             dialog: false, 
             keyword: '',
             rumahSakits: [],
-            form: { 
-                rumahSakit : '',
-            }, 
             temp: {
-                // user_id : localStorage.getItem("id"),
-                // hair_id : '',
                 rumahSakit_id : '',
-                // barber_id : '5',
-                // Math.floor(Math.random() * (10 - 1 + 1)) + 1
             },
             headers: [ 
                 { 
@@ -164,11 +160,12 @@ export default {
             color: null, 
             text: '', 
             load: false,
-            // form: { 
-            //     name : '', 
-            //     spesialis : '', 
-            //     rumahSakit : '' 
-            // }, 
+            form: { 
+                name : '', 
+                spesialis : '', 
+                rumahSakit : '',
+                image: '',
+            }, 
             doctor : new FormData,
             rumahSakit : new FormData,
             typeInput: 'new', 
@@ -193,6 +190,7 @@ export default {
             this.doctor.append('name', this.form.name); 
             this.doctor.append('spesialis', this.form.spesialis); 
             this.doctor.append('id_rumahSakit', this.temp.rumahSakit_id); 
+            this.doctor.append('image', this.form.image);
             var uri =this.$apiUrl + '/doctor' 
             this.load = true 
             this.$http.post(uri,this.doctor).then(response =>{ 
@@ -216,6 +214,7 @@ export default {
             this.doctor.append('name', this.form.name); 
             this.doctor.append('spesialis', this.form.spesialis); 
             this.doctor.append('id_rumahSakit', this.temp.rumahSakit_id); 
+            this.doctor.append('image', this.form.image);
             var uri = this.$apiUrl + '/doctor/' + this.updatedId; 
             this.load = true 
             this.$http.post(uri,this.doctor).then(response =>{
@@ -240,7 +239,7 @@ export default {
             this.dialog = true; 
             this.form.name = item.name; 
             this.form.spesialis = item.spesialis; 
-            // this.form.rumahSakit = item.rumahSakit, 
+            this.form.image = item.image, 
             this.updatedId = item.id 
         },
         change(item){ 
@@ -275,7 +274,8 @@ export default {
             this.form = { 
                 name : '', 
                 spesialis : '', 
-                rumahSakit : '' 
+                rumahSakit : '',
+                image: '',
             } 
         } 
     }, 

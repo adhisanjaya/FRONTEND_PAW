@@ -63,10 +63,6 @@
         ADMIN HEALTY CONSULTANT
       </v-toolbar-title>
       <VSpacer /> 
-      <!-- <v-btn text rounded>Home</v-btn>
-      <v-btn text rounded>Contact Us</v-btn>
-      <v-btn text rounded>About Us</v-btn>
-      <v-btn text rounded>List</v-btn> -->
     </v-app-bar> 
     <VContent >
       <router-view />
@@ -91,15 +87,15 @@
             to: "/doctorController"
           },
           { 
-            title: 'Agreement Controller', 
-            icon: 'mdi-book-multiple', 
-            to: "/agreementController"
-            },
-          { 
             title: 'Hospital Controller', 
             icon: 'mdi-hospital-building', 
             to: "/rumahSakitController"
-          }, 
+          },
+          { 
+            title: 'Agreement Controller', 
+            icon: 'mdi-book-multiple', 
+            to: "/agreementController"
+          } 
         ], 
       } 
     },
@@ -110,7 +106,7 @@
       logout(){
           localStorage.removeItem("token")
           localStorage.removeItem("type")
-          this.$router.push({name : "Login"})
+          this.$router.push({name : "dashController"})
       },
     } 
   }

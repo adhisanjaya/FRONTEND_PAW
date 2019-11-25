@@ -56,7 +56,7 @@
       moveRegister() {
         this.$router.push('/Register')
       },
-       login() {
+      login() {
       var url = this.$apiUrl + "/login";
       this.user = new FormData();
       this.user.append("email", this.form.email);
@@ -72,7 +72,7 @@
           localStorage.setItem("image",response.data.link_image);
           
           if (localStorage.getItem("token") && localStorage.getItem("type") == 1) {
-                this.$router.push({ name: "dashController" });
+                this.$router.push({ name: "dashController1" });
             } else {
                 this.$router.push({ name: "userController" });
             }

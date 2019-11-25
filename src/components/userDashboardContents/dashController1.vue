@@ -26,7 +26,7 @@
             color="blue-darken"
             depressed
             round
-            router to="/Login"
+            router to="/makeAgreementController"
           >
             Get Started!
           </v-btn>
